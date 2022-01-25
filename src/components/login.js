@@ -18,6 +18,7 @@ function Login() {
             const email = data.get("email");
             const pass = data.get("password");
             await signInWithEmailAndPassword(auth, email, pass);
+            navigate("/quiz");
         } catch (error) {
             const errorCode = error;
             console.log(errorCode)
