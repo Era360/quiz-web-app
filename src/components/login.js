@@ -1,5 +1,6 @@
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import React, { useState } from 'react';
+import css from "./login.module.css";
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Envelope, EyeFill, EyeSlashFill, Google, Key } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { era } from '../assets/images';
@@ -9,6 +10,7 @@ function Login() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,8 +22,8 @@ function Login() {
             await signInWithEmailAndPassword(auth, email, pass);
             navigate("/quiz");
         } catch (error) {
-            const errorCode = error;
-            console.log(errorCode)
+            const errorCode = error.code;
+            setError(errorCode);
         }
         setLoading(false);
     };
@@ -32,7 +34,7 @@ function Login() {
             await signInWithPopup(auth, provider)
             navigate("/quiz");
         } catch (error) {
-            const errorCode = error;
+            const errorCode = error.code;
             console.log(errorCode);
         }
     };
@@ -44,30 +46,28 @@ function Login() {
 
 
     return <>
-        <div className="wrapper">
-            <div className="text-center mt-4 name">
+        <div className={css.wrapper}>
+            <div className={css.name}>
                 Era Quiz
             </div>
-            <div className="logo">
-                <img src={era} alt="" />
+            <div className={css.logo}>
+                <img src={era} alt="era logo" />
             </div>
             <div className='text-center h5 mt-2'>Log in with</div>
             <div className='d-flex justify-content-evenly mt-1' >
-                {/* <button type="button" className='btn'>
-                    <Facebook size={20} color='#008dd3' />
-                </button> */}
                 <button type='button' className='btn' onClick={withGoogle}>
                     <Google size={20} color='#e6382c' />
                 </button>
             </div>
             <div className='text-center fs-4 mt-2'>or</div>
+            {error ? <div className='alert alert-danger' role="alert">{error}</div> : null}
             <form onSubmit={handleSubmit} className="p-3 mt-1">
-                <div className="form-field d-flex align-items-center">
-                    <span className="fas fa-user"> <Envelope /> </span>
+                <div className={css.form_field + " d-flex align-items-center"} >
+                    <span> <Envelope /> </span>
                     <input type="email" name="email" id="userName" placeholder="Email" />
                 </div>
-                <div className="form-field d-flex align-items-center">
-                    <span className="fas fa-key"> <Key /> </span>
+                <div className={css.form_field + " d-flex align-items-center"}>
+                    <span> <Key /> </span>
                     <input type={showPassword ? "text" : "password"} name="password" id="pwd" placeholder="Password" />
                     <button
                         type="button"
@@ -81,7 +81,7 @@ function Login() {
                         )}
                     </button>
                 </div>
-                <button type="submit" className="btnn mt-3" disabled={loading}>Login</button>
+                <button type="submit" className={css.btnn + " mt-3"} disabled={loading}>Login</button>
             </form>
             <div className="text-center fs-6">
                 <Link to="/quiz">Forget password?</Link> or <Link to="/signup">Sign up</Link>

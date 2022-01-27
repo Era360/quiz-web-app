@@ -34,6 +34,7 @@ function Quiz() {
         async function fetchquestions() {
             const res = await fetch("https://opentdb.com/api.php?amount=5");
             const data = await res.json();
+
             setData(data.results.map(item => (
                 {
                     question: item.question,
@@ -42,38 +43,54 @@ function Quiz() {
                 }
             )));
         }
-
     }, [])
     // if (data !== null) {
     //     console.log(data.results);
     // }
 
-    return <div>
+    return <div className='body'>
         <nav className="navbar navbar-dark bg-dark">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">
                     Era Quiz
                 </Link>
-                {/* <img className="avatar" src={usericon} alt="" /> */}
-                <button
-                    className="btn"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
-                    title="Login to your account"
-                    onClick={goLogin}
-                >
-                    {/* {console.log(currentUser)} */}
-                    {currentUser !== null ? (<img className='avatar' src={currentUser.photoURL} alt={currentUser.displayName} />)
-                        :
-                        (<Person size={30} color="white" />)
-                    }
-                </button>
+                <div className='d-flex align-items-center'>
+                    <button
+                        className="btn"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Login to your account"
+                        onClick={goLogin}
+                    >
+                        {/* {console.log(currentUser)} */}
+                        {currentUser && currentUser.photoURL ? (<img className='avatar' src={currentUser.photoURL} alt={currentUser.displayName} />)
+                            :
+                            (<Person size={30} color="white" />)
+                        }
+                    </button>
+                    {currentUser && currentUser.displayName ? <div>{currentUser.displayName}</div> : <div className='text-white'>Guest</div>}
+                </div>
             </div>
         </nav>
-        <div className='body'>
-            {!data ? <Spinner /> : <Questions info={data} />}
-            <button className='btn btn-warning' onClick={goOut}>Sign out</button>
+        <div className='fs-3 text-white text-center p-4'>Welcome
+            {currentUser && currentUser.displayName ? ` ${currentUser.displayName}` : "  Guest"}
         </div>
+        <div className='main'>
+            {!data ? <Spinner /> : <Questions info={data} />}
+        </div>
+        <div className="footer">
+            {
+                currentUser ? (
+                    <div>
+                        <button className='btn btn-warning' onClick={goOut}>Sign out</button>
+                        <div className='h4'>Welcome and come again</div>
+                    </div>
+                )
+                    :
+                    <div>Welcome and come again</div>
+            }
+        </div>
+
     </div>;
 }
 

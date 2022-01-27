@@ -3,6 +3,7 @@ import Login from './components/login';
 import Quiz from './components/quiz';
 import SignUp from './components/signup';
 import Welcome from './components/welcome';
+// import './App.css'
 
 function App() {
   return (

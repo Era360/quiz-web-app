@@ -1,10 +1,28 @@
 .container {
-    max-width: 350px;
-    min-height: 500px;
+    max-width: 500px;
     margin: 20px auto;
     padding:30px;
     background-color: #ecf0f3;
     border-radius: 15px;
     box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff
-    
 }
+.btnnn {
+    box-shadow: none;
+    width: 40%;
+    height: 40px;
+    background-color: #03A9F4;
+    color: #fff;
+    border-radius: 25px;
+    border: none;
+    box-shadow: 3px 3px 3px #b1b1b1, -3px -3px 3px #fff;
+    letter-spacing: 1.3px
+  }
+  
+  .btnnn:hover {
+    background-color: #039BE5
+  }
+/* @media screen and (min-width: 500px) {
+    .container{
+        margin:80px auto;
+    }
+} */
