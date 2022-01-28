@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 function Questions({ info }) {
     const [number, setNumber] = useState(0);
     const [pts, setPts] = useState(0);
+    // console.log(info);
 
     const pickAnswer = (e) => {
         let userAnswer = e.target.outerText;

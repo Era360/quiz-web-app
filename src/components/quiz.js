@@ -1,9 +1,10 @@
 import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { Person } from 'react-bootstrap-icons';
+import { CloudSlash, EmojiFrown, Person } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { getCurrentuser } from '../utils/utils';
+import Category from './categories';
 import Questions from './questions';
 import Spinner from './spinner';
 
@@ -12,6 +13,9 @@ function Quiz() {
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(getCurrentuser);
     const [data, setData] = useState(null);
+    const [error, setError] = useState("");
+    const [changecat, setChangecat] = useState(true);
+    const [parameter, setParameter] = useState(null);
 
     const goLogin = () => {
         navigate("/login");
@@ -22,31 +26,59 @@ function Quiz() {
             await signOut(auth);
             navigate("/")
         } catch (err) {
-            console.log(err);
+            setError(err.code);
         }
     };
     const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+    const changecatthing = (param) => {
+        // console.log(param);
+        setParameter({
+            amount: param.amount,
+            cat_id: param.cat_id,
+            dif: param.dif,
+        });
+        setChangecat(!changecat);
+    };
+    // console.log(data);
+
+
 
     useEffect(() => {
         setCurrentUser(getCurrentuser);
         fetchquestions();
 
         async function fetchquestions() {
-            const res = await fetch("https://opentdb.com/api.php?amount=5");
-            const data = await res.json();
+            if (parameter) {
+                try {
+                    const res = await fetch(`https://opentdb.com/api.php?amount=${parameter.amount}&category=${parameter.cat_id}&difficulty=${parameter.dif}`);
+                    const data = await res.json();
 
-            setData(data.results.map(item => (
-                {
-                    question: item.question,
-                    options: shuffle([...item.incorrect_answers, item.correct_answer]),
-                    answer: item.correct_answer
+                    setData(data.results.map(item => (
+                        {
+                            question: item.question,
+                            options: shuffle([...item.incorrect_answers, item.correct_answer]),
+                            answer: item.correct_answer
+                        }
+                    )));
+                } catch (error) {
+                    setError(" We failed to get the questions please try to refresh your page");
                 }
-            )));
+            }
         }
-    }, [])
-    // if (data !== null) {
-    //     console.log(data.results);
-    // }
+
+    }, [parameter])
+
+    const Checker = () => {
+        if (!data && parameter) return <Spinner />
+
+
+        if (changecat) return <Category setcat={(pa) => changecatthing(pa)} />
+
+        return <Questions info={data} />
+
+    };
+
 
     return <div className='body'>
         <nav className="navbar navbar-dark bg-dark">
@@ -54,7 +86,7 @@ function Quiz() {
                 <Link className="navbar-brand" to="/">
                     Era Quiz
                 </Link>
-                <div className='d-flex align-items-center'>
+                <div className='d-flex align-items-center text-white'>
                     <button
                         className="btn"
                         data-bs-toggle="tooltip"
@@ -65,18 +97,25 @@ function Quiz() {
                         {/* {console.log(currentUser)} */}
                         {currentUser && currentUser.photoURL ? (<img className='avatar' src={currentUser.photoURL} alt={currentUser.displayName} />)
                             :
-                            (<Person size={30} color="white" />)
+                            (<Person size={30} color='white' />)
                         }
                     </button>
-                    {currentUser && currentUser.displayName ? <div>{currentUser.displayName}</div> : <div className='text-white'>Guest</div>}
+                    {currentUser && currentUser.displayName ? <div>{currentUser.displayName}</div> : <div>Guest</div>}
                 </div>
             </div>
         </nav>
-        <div className='fs-3 text-white text-center p-4'>Welcome
-            {currentUser && currentUser.displayName ? ` ${currentUser.displayName}` : "  Guest"}
-        </div>
+        {
+            error
+                ?
+                <div role="alert" className='alert alert-danger'><CloudSlash size={30} />{error}</div>
+                :
+                <div className='fs-3 text-white text-center p-4'>Welcome
+                    {currentUser && currentUser.displayName ? ` ${currentUser.displayName}` : "  Guest"}
+                </div>
+        }
         <div className='main'>
-            {!data ? <Spinner /> : <Questions info={data} />}
+            {error ? <div className='text-center'><EmojiFrown size={100} /></div> : <Checker />}
+            {/* {!data ? <Spinner /> : <Questions info={data} />} */}
         </div>
         <div className="footer">
             {

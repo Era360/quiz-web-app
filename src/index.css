@@ -54,6 +54,29 @@ body {
         width: 50%;
     }
 }
+.categories{
+  max-height: 580px;
+  overflow-y: scroll;
+  padding: 10px;
+}
+::-webkit-scrollbar{
+  width: 0px;
+  background: transparent;
+}
+.category{
+  display: block;
+  border: 1px solid #969696;
+  border-radius: 10px;
+  padding: 10px 10px;
+  text-decoration: none;
+  background-color: rgba(0,0,0,0.3);
+  transition: 0.3s;
+  font-size: 1em;
+  /* outline: none; */
+  user-select: none;
+  margin-top: .3em;
+  cursor: pointer;
+}
 .option {
     display: block;
     border: 1px solid #616A94;
@@ -68,10 +91,10 @@ body {
     margin-top: .3em;
     cursor: pointer;
 }
-@media screen and (min-width: 1180px) {
-    .option:hover {
+@media screen and (min-width: 900px) {
+    .option:hover, .category:hover {
         color: white;
-        background-color: #616A94;
+        background-color: #949596;
     }
 }
 .spinner_container {
