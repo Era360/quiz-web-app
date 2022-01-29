@@ -43,7 +43,11 @@ function Category(props) {
         const amount = parseInt(data.get("amount"));
         if (amount > 50) {
             setError("Please enter amount less than 50")
-        } else {
+        } else if (amount <= 0) {
+            setError("Please enter resonable number of questions.")
+        }
+
+        else {
             setParams({
                 ...params,
                 "amount": amount
@@ -52,7 +56,6 @@ function Category(props) {
         }
     };
     const submitting = () => {
-        // console.log(params);
         props.setcat(params);
         setCurrpara(0)
     };
@@ -127,9 +130,6 @@ function Category(props) {
             <button style={but} onClick={submitting}>Done</button>
         </div>
     };
-
-
-
 
     return <>
         <div>

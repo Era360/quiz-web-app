@@ -41,7 +41,9 @@ body {
 }
 .q{
     width: 90%;
-    margin: 0 auto;
+    margin: 10px auto;
+    font-weight: bolder;
+    font-size: larger;
 }
 .options {
     display: flex;
@@ -79,7 +81,7 @@ body {
 }
 .option {
     display: block;
-    border: 1px solid #616A94;
+    border: 1px solid #969696;
     border-radius: 20px;
     padding: 15px 30px;
     text-decoration: none;
@@ -118,4 +120,13 @@ body {
     100% {
       transform: rotate(360deg);
     }
+  }
+  .repeat_btn {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    margin: 8px 5px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #94928e;
   }

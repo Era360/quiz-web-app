@@ -31,19 +31,18 @@ function Login() {
     const withGoogle = async () => {
         try {
             setLoading(true)
+            provider.setCustomParameters({ prompt: "select_account" })
             await signInWithPopup(auth, provider)
             navigate("/quiz");
         } catch (error) {
             const errorCode = error.code;
+            setError(errorCode);
             console.log(errorCode);
         }
     };
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
-
-
 
     return <>
         <div className={css.wrapper}>
@@ -83,6 +82,7 @@ function Login() {
                 </div>
                 <button type="submit" className={css.btnn + " mt-3"} disabled={loading}>Login</button>
             </form>
+            {error}
             <div className="text-center fs-6">
                 <Link to="/quiz">Forget password?</Link> or <Link to="/signup">Sign up</Link>
             </div>
