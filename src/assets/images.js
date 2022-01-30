@@ -1,4 +1,3 @@
-import era from "./era.png";
+import logo from "./logo.png";
 
-
-export { era };
+export { logo };

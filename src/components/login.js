@@ -3,7 +3,7 @@ import css from "./login.module.css";
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Envelope, EyeFill, EyeSlashFill, Google, Key } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { era } from '../assets/images';
+import { logo } from '../assets/images';
 import { auth, provider } from '../firebase';
 
 function Login() {
@@ -50,7 +50,7 @@ function Login() {
                 Era Quiz
             </div>
             <div className={css.logo}>
-                <img src={era} alt="era logo" />
+                <img src={logo} alt="era logo" />
             </div>
             <div className='text-center h5 mt-2'>Log in with</div>
             <div className='d-flex justify-content-evenly mt-1' >
@@ -82,9 +82,10 @@ function Login() {
                 </div>
                 <button type="submit" className={css.btnn + " mt-3"} disabled={loading}>Login</button>
             </form>
-            {error}
-            <div className="text-center fs-6">
-                <Link to="/quiz">Forget password?</Link> or <Link to="/signup">Sign up</Link>
+            <div className="text-center">
+                {/* <Link to="/quiz">Forget password?</Link> or  */}
+                <Link to="/signup">Sign up</Link>
+                <div className='h2'><Link to="/quiz">Continue as Guest</Link></div>
             </div>
         </div>
     </>;

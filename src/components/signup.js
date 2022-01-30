@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import css from "./login.module.css";
 import { Envelope, EyeFill, EyeSlashFill, Google, Key, Person } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { era } from '../assets/images';
+import { logo } from '../assets/images';
 import { auth, provider } from '../firebase';
 
 function SignUp() {
@@ -19,7 +19,7 @@ function SignUp() {
             navigate("/quiz");
         } catch (error) {
             const errorCode = error;
-            console.log(errorCode);
+            setError(errorCode);
         }
         setLoading(false);
     };
@@ -52,7 +52,7 @@ function SignUp() {
                 Era Quiz
             </div>
             <div className={css.logo}>
-                <img src={era} alt="" />
+                <img src={logo} alt="" />
             </div>
             <div className='text-center h5 mt-2'>Sign up with</div>
             <div className='d-flex justify-content-evenly' >

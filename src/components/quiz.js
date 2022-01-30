@@ -9,7 +9,7 @@ import Questions from './questions';
 import Spinner from './spinner';
 
 
-function Quiz() {
+function Quiz({ getUser }) {
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(getCurrentuser);
     const [data, setData] = useState(null);
@@ -95,8 +95,7 @@ function Quiz() {
     };
 
     useEffect(() => {
-        setCurrentUser(getCurrentuser);
-        // console.log(session);
+        if (getUser) setCurrentUser(getUser);
         fetchquestions();
 
         async function fetchquestions() {
@@ -123,7 +122,7 @@ function Quiz() {
             }
         }
 
-    }, [parameter, session])
+    }, [parameter, session, getUser])
 
     const Checker = () => {
         if (!data && parameter) return <Spinner />
@@ -155,15 +154,20 @@ function Quiz() {
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
                         title="Login to your account"
+                        disabled={currentUser ? true : false}
                         onClick={goLogin}
                     >
-                        {/* {console.log(currentUser)} */}
-                        {currentUser && currentUser.photoURL ? (<img className='avatar' src={currentUser.photoURL} alt={currentUser.displayName} />)
+                        {currentUser?.photoURL ? (<img className='avatar' src={currentUser.photoURL} alt={currentUser.displayName} />)
                             :
                             (<Person size={30} color='white' />)
                         }
                     </button>
-                    {currentUser && currentUser.displayName ? <div>{currentUser.displayName}</div> : <div>Guest</div>}
+                    {currentUser && currentUser.displayName ? <div
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Sign Out at the bottom of page"
+                    >
+                        {currentUser.displayName}</div> : <div>Guest</div>}
                 </div>
             </div>
         </nav>
