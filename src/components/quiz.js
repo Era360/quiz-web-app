@@ -3,15 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { CloudSlash, EmojiFrown, Envelope, Person, Twitter } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
-import { getCurrentuser } from '../utils/utils';
 import Category from './categories';
 import Questions from './questions';
 import Spinner from './spinner';
 
-
 function Quiz({ getUser }) {
     const navigate = useNavigate();
-    const [currentUser, setCurrentUser] = useState(getCurrentuser);
+    const [currentUser, setCurrentUser] = useState(getUser);
     const [data, setData] = useState(null);
     const [error, setError] = useState("");
     const [changecat, setChangecat] = useState(true);
