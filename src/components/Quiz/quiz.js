@@ -2,10 +2,10 @@ import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CloudSlash, EmojiFrown, Envelope, Person, Twitter } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import Category from './categories';
 import Questions from './questions';
-import Spinner from './spinner';
+import Spinner from '../utils/spinner';
 
 function Quiz({ getUser }) {
     const navigate = useNavigate();

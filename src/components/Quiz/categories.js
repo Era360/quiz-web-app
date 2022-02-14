@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { EmojiAngryFill } from 'react-bootstrap-icons';
-import Spinner from './spinner';
+import Spinner from '../utils/spinner';
 
 function Category(props) {
     const [catego, setCatego] = useState();
