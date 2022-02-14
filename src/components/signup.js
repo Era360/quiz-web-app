@@ -16,7 +16,7 @@ function SignUp() {
         try {
             setLoading(true)
             await signInWithPopup(auth, provider)
-            navigate("/quiz");
+            navigate("/");
         } catch (error) {
             const errorCode = error;
             setError(errorCode);
@@ -34,7 +34,7 @@ function SignUp() {
             await createUserWithEmailAndPassword(auth, email, pass);
             const user = auth.currentUser;
             await updateProfile(user, { displayName: username })
-            navigate("/quiz");
+            navigate("/");
         } catch (error) {
             const errorCode = error.code;
             setError(errorCode);

@@ -1,0 +1,25 @@
+form {
+    text-align: center;
+}
+input {
+    border: none;
+    border-radius: 10px;
+    width: 50%;
+    height: 2rem;
+    text-align: center;
+}
+span{
+    font-size: 25px;
+    margin: 0 15px;
+}
+.btnn{
+    color: white;
+    border: none;
+    background: none;
+}
+textarea{
+    text-align: center;
+    width: 50%;
+    border: none;
+    border-radius: 15px;
+}

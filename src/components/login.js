@@ -20,7 +20,7 @@ function Login() {
             const email = data.get("email");
             const pass = data.get("password");
             await signInWithEmailAndPassword(auth, email, pass);
-            navigate("/quiz");
+            navigate("/");
         } catch (error) {
             const errorCode = error.code;
             setError(errorCode);
@@ -33,7 +33,7 @@ function Login() {
             setLoading(true)
             provider.setCustomParameters({ prompt: "select_account" })
             await signInWithPopup(auth, provider)
-            navigate("/quiz");
+            navigate("/");
         } catch (error) {
             const errorCode = error.code;
             setError(errorCode);

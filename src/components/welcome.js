@@ -39,6 +39,12 @@ function Welcome({ getUser }) {
                         <div className='h6 mb-2'>Still logged in as {currentUser.displayName}</div>
                         <button className={css.btnnn} onClick={() => navigate("/quiz")}>Start</button>
                     </div>
+                    <div className='text-center my-4'>
+                        <div className='my-2'>Please help us to add questions</div>
+                        <div>
+                            <button className="btn btn-success" onClick={() => navigate("/addquestions")}>Okay  </button>
+                        </div>
+                    </div>
                     <div className='text-center'>
                         {error && <div className='alert alert-warning mt-3 p-1' role="alert">{error}</div>}
                         <button className='btn btn-warning mt-2' onClick={goOut}>Sign out</button>
@@ -54,6 +60,12 @@ function Welcome({ getUser }) {
                     <div className='text-center my-4'>Press the button below to start as guest</div>
                     <div className='text-center'>
                         <button className={css.btnnn} onClick={() => navigate("/quiz")}>Start</button>
+                    </div>
+                    <div className='text-center my-4'>
+                        <div className='my-2 fw-bolder'>Please login to help us add questions</div>
+                        <div >
+                            <button className="btn btn-success" onClick={() => navigate("/login")}>Okay</button>
+                        </div>
                     </div>
                 </div>
         }
