@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import css from "./addquestions.module.css"
 import { db } from '../firebase';
-import { collection, doc, getDocs, increment, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from 'firebase/firestore';
 
 function AddQueastions({ getUser }) {
     const [comp, setcomp] = useState(0);
@@ -16,30 +16,48 @@ function AddQueastions({ getUser }) {
     }, [getUser])
 
     const addQuest = async (quests) => {
+        let present = false;
         const { uid } = currentUser;
+        try {
+            const querySnap = await getDoc(doc(db, "questions", quests["difficulty"]));
+            if (querySnap.exists()) {
+                present = true;
+            }
+        } catch (err) {
+            console.log(err);
+        }
 
         let curr = "";
         try {
-            let count = 0;
-            const userRef = doc(db, `users/${uid}`);
-            await updateDoc(userRef, {
-                contributes: increment(1)
-            })
-            const querySnap = await getDocs(collection(db, `questions/${quests['category']}/${quests["difficulty"]}`));
-            querySnap.forEach((doc) => {
-                count += 1;
-            })
-            curr = (count + 1).toString();
-        } catch (error) {
-            console.log(error);
-        }
-        try {
-            const userRef = doc(db, `questions/${quests['category']}/${quests["difficulty"]}`, curr);
-            await setDoc(userRef, {
-                "correct": quests["correct_answer"],
-                "options": quests["options"],
-                "question": quests["question"]
-            });
+            if (present) {
+                let count = 0;
+                const querySnap = await getDocs(collection(db, `questions/${quests["difficulty"]}/${quests["category"]}`));
+                querySnap.forEach((doc) => {
+                    count += 1;
+                })
+                curr = (count + 1).toString();
+                const dbRef = doc(db, `questions/${quests["difficulty"]}/${quests["category"]}`, curr);
+                await setDoc(dbRef, {
+                    "correct": quests["correct_answer"],
+                    "options": quests["options"],
+                    "question": quests["question"]
+                });
+                const userRef = doc(db, `users/${uid}`);
+                await updateDoc(userRef, {
+                    contributes: increment(1)
+                })
+            } else {
+                // Who is the first president of Tanzania?
+                await setDoc(doc(db, `questions/${quests["difficulty"]}/${quests["category"]}/1`), {
+                    "correct": quests["correct_answer"],
+                    "options": quests["options"],
+                    "question": quests["question"]
+                });
+                const userRef = doc(db, `users/${uid}`);
+                await updateDoc(userRef, {
+                    contributes: increment(1)
+                })
+            }
         } catch (err) {
             console.log(err)
         }
@@ -194,7 +212,7 @@ function AddQueastions({ getUser }) {
                         <span><button className='btn text-white' type="submit">add</button></span>
                     </form>
             }
-            {opt.length >= 3 && <div className='text-center my-4'><button onClick={submit} className='btn btn-success'>Submit</button></div>}
+            {opt.length >= 4 && <div className='text-center my-4'><button onClick={submit} className='btn btn-success'>Submit</button></div>}
         </>
     }
 
