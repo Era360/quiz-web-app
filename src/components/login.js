@@ -4,10 +4,12 @@ import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Envelope, EyeFill, EyeSlashFill, Google, Key } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { logo } from '../assets/images';
-import { auth, provider } from '../firebase';
+import { analy, auth, provider } from '../firebase';
 import Spinner from './utils/spinner';
+import { setCurrentScreen } from 'firebase/analytics';
 
 function Login() {
+    setCurrentScreen(analy, "Login_page");
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);

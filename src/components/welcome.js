@@ -1,11 +1,13 @@
+import { setCurrentScreen } from 'firebase/analytics';
 import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
-import { auth } from '../firebase';
+import { analy, auth } from '../firebase';
 import Spinner from './utils/spinner';
 import css from "./welcome.module.css"
 
 function Welcome({ getUser }) {
+    setCurrentScreen(analy, "Welcome_screen");
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState();
     const [error, setError] = useState("");

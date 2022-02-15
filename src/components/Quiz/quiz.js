@@ -2,12 +2,14 @@ import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { CloudSlash, EmojiFrown, Envelope, Person, Twitter } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase';
+import { analy, auth } from '../../firebase';
 import Category from './categories';
 import Questions from './questions';
 import Spinner from '../utils/spinner';
+import { setCurrentScreen } from 'firebase/analytics';
 
 function Quiz({ getUser }) {
+    setCurrentScreen(analy, "Quiz_page");
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(getUser);
     const [data, setData] = useState(null);

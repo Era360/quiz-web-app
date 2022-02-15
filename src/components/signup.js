@@ -4,9 +4,11 @@ import css from "./login.module.css";
 import { Envelope, EyeFill, EyeSlashFill, Google, Key, Person } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { logo } from '../assets/images';
-import { auth, provider } from '../firebase';
+import { analy, auth, provider } from '../firebase';
+import { setCurrentScreen } from 'firebase/analytics';
 
 function SignUp() {
+    setCurrentScreen(analy, "SignUp_page");
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import css from "./addquestions.module.css"
-import { db } from '../firebase';
+import { analy, db } from '../firebase';
 import { arrayUnion, collection, doc, getDoc, getDocs, increment, setDoc, updateDoc } from 'firebase/firestore';
 import Spinner from './utils/spinner';
+import { setCurrentScreen } from 'firebase/analytics';
 
 function AddQueastions({ getUser }) {
+    setCurrentScreen(analy, "addQuestions_page");
     const [comp, setcomp] = useState(0);
     const [newquestion, setNewquestion] = useState({});
     const [currentUser, setCurrentUser] = useState();
