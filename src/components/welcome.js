@@ -2,6 +2,7 @@ import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
 import { auth } from '../firebase';
+import Spinner from './utils/spinner';
 import css from "./welcome.module.css"
 
 function Welcome({ getUser }) {
@@ -26,7 +27,7 @@ function Welcome({ getUser }) {
         }
     };
 
-    if (initializing) return null;
+    if (initializing) return <Spinner />;
 
     return <div className={css.container}>
         <div className='text-center h3'>Welcome to Era Quiz</div>
@@ -36,7 +37,7 @@ function Welcome({ getUser }) {
                 <div>
                     <div className='text-center my-4'>Press the button below to start</div>
                     <div className='text-center'>
-                        <div className='h6 mb-2'>Still logged in as {currentUser.displayName}</div>
+                        <div className='h6 mb-2'>Logged in as {currentUser.displayName}</div>
                         <button className={css.btnnn} onClick={() => navigate("/quiz")}>Start</button>
                     </div>
                     <div className='text-center my-4'>
@@ -62,9 +63,9 @@ function Welcome({ getUser }) {
                         <button className={css.btnnn} onClick={() => navigate("/quiz")}>Start</button>
                     </div>
                     <div className='text-center my-4'>
-                        <div className='my-2 fw-bolder'>Please login to help us add questions</div>
+                        <div className='my-2 fw-bolder'>Please help us to add more questions</div>
                         <div >
-                            <button className="btn btn-success" onClick={() => navigate("/login")}>Okay</button>
+                            <button className="btn btn-success" onClick={() => navigate("/addquestions")}>Okay</button>
                         </div>
                     </div>
                 </div>

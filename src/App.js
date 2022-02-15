@@ -5,7 +5,6 @@ import AddQueastions from './components/addQuestions';
 import Login from './components/login';
 import Quiz from './components/Quiz/quiz';
 import SignUp from './components/signup';
-import PrivateRoute from './components/utils/private comp';
 import Welcome from './components/welcome';
 import { auth } from './firebase';
 
@@ -31,9 +30,7 @@ function App() {
           <Route element={<Quiz getUser={currentUser} />} path="/quiz" />
           <Route element={<Login />} path="/login" />
           <Route element={<SignUp />} path="/signup" />
-          <Route exact element={<PrivateRoute />} path="/addquestions" >
-            <Route element={<AddQueastions getUser={currentUser} />} path="/addquestions" />
-          </Route>
+          <Route element={<AddQueastions getUser={currentUser} />} path="/addquestions" />
         </Routes>
       </Router>
     </>

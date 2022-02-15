@@ -5,7 +5,7 @@ input {
     border: none;
     border-radius: 10px;
     width: 50%;
-    height: 2rem;
+    height: 4rem;
     text-align: center;
 }
 span{
@@ -17,9 +17,20 @@ span{
     border: none;
     background: none;
 }
-textarea{
+.textarea{
     text-align: center;
     width: 50%;
+    height: 40vh;
     border: none;
     border-radius: 15px;
+}
+@media screen and (max-width: 600px) {
+    .textarea {
+        width: 90%;
+        height: 50vh;
+    }
+    input{
+        width: 90%;
+        height: 10vh;
+    }
 }

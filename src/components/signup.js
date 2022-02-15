@@ -68,11 +68,11 @@ function SignUp() {
                     <input type="text" name="user" id="userName" placeholder="User name" />
                 </div>
                 <div className={css.form_field + " d-flex align-items-center"}>
-                    <span className="fas "> <Envelope /> </span>
+                    <span > <Envelope /> </span>
                     <input type="email" name="email" id="email" placeholder="Email" />
                 </div>
                 <div className={css.form_field + " d-flex align-items-center"}>
-                    <span className="fas "> <Key /> </span>
+                    <span > <Key /> </span>
                     <input type={showPassword ? "text" : "password"} name="password" id="pwd" placeholder="Password" />
                     <button
                         type="button"

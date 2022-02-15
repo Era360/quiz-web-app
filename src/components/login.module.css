@@ -36,7 +36,12 @@
   font-size: 1.0rem;
   letter-spacing: 1.3px;
   padding-left: 10px;
-  /* color: rgb(211, 211, 211) */
+}
+.wrapper .form_field {
+    padding-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff
 }
 
 .wrapper .form_field input {
@@ -48,17 +53,6 @@
     font-size: 1.2rem;
     color: #666;
     padding: 10px 15px 10px 10px
-}
-
-.wrapper .form_field {
-    padding-left: 10px;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff
-}
-
-.wrapper .form_field .fas {
-    color: #555
 }
 
 .wrapper .btnn {
