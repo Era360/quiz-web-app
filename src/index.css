@@ -45,7 +45,7 @@
     }
 }
 .categories{
-  max-height: 580px;
+  max-height: 450px;
   overflow-y: scroll;
   padding: 30px;
 }
