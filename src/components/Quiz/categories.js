@@ -1,17 +1,56 @@
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { EmojiAngryFill } from 'react-bootstrap-icons';
+import { db } from '../../firebase';
 import Spinner from '../utils/spinner';
 
 function Category(props) {
     const [catego, setCatego] = useState();
+    const [fav, setFav] = useState()
+    const [best, setBest] = useState([]);
     const [params, setParams] = useState();
     const [currPara, setCurrpara] = useState(0);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     // const navigate = useNavigate();
 
     useEffect(() => {
+        if (props.currentUser) {
+            fetchfav()
+        }
         fetchlist();
 
+        async function fetchfav() {
+            try {
+                const { uid } = props.currentUser;
+                const userRef = doc(db, `users/${uid}`);
+                const data = await getDoc(userRef)
+                if (data.data()["favourite"]) {
+                    setFav(data.data()["favourite"])
+                    let bests = []
+                    data.data()["favourite"].forEach((item) => {
+                        if (bests.length === 3) {
+                            const min = bests.reduce(function (prev, current) {
+                                return (prev.count < current.count) ? prev : current
+                            })
+                            const index = bests.indexOf(min);
+                            if (index > -1) {
+                                bests[index] = item;
+                            }
+                            // console.log(min);
+                        } else {
+                            bests.push(item)
+                        }
+                        // console.log(item["count"])
+                    })
+
+                    setBest(bests);
+                }
+
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
         async function fetchlist() {
             try {
                 const res = await fetch("https://opentdb.com/api_category.php");
@@ -22,14 +61,75 @@ function Category(props) {
                 console.log(error);
             }
         }
-    }, [])
-    const pickCat = (id) => {
+    }, [props])
+
+    const pickCat = async (item, index) => {
+        // console.log(item);
         setParams({
             ...params,
-            "cat_id": id
+            "cat_id": item["id"]
         })
+
+        if (props.currentUser) {
+            setLoading(true);
+            const { uid } = props.currentUser;
+            const dbRefDif = doc(db, `users/${uid}`);
+            let gotIt = false
+            let none = false
+            let indexx;
+
+            if (fav === undefined) {
+                try {
+
+                    let favourite = {
+                        id: item["id"],
+                        count: 1,
+                        name: item["name"]
+                    }
+                    await updateDoc(dbRefDif, {
+                        favourite: arrayUnion(favourite)
+                    });
+
+                } catch (err) {
+                    console.log("failed to upload favourite")
+                }
+
+            } else if (fav.includes(item)) {
+                fav[index]["count"] += 1
+                await setDoc(dbRefDif, {
+                    favourite: fav
+                }, { merge: true });
+            } else {
+                fav.forEach((itemm, index) => {
+                    if (itemm["name"] === item["name"]) {
+                        indexx = index
+                        gotIt = true
+                        none = false
+                    } else {
+                        none = true
+                    }
+                })
+            }
+            if (gotIt) {
+                fav[indexx]["count"] += 1
+                await setDoc(dbRefDif, {
+                    favourite: fav
+                }, { merge: true });
+            } else if (none) {
+                let favourite = {
+                    id: item["id"],
+                    count: 1,
+                    name: item["name"]
+                }
+                await updateDoc(dbRefDif, {
+                    favourite: arrayUnion(favourite)
+                });
+            }
+        }
+        setLoading(false);
         setCurrpara(currPara + 1)
     };
+
     const difPut = (e) => {
         setParams({
             ...params,
@@ -62,13 +162,37 @@ function Category(props) {
 
     const Cats = () => {
         return <div className='text-white'>
-            <div className='h4 mx-2'>Choose your favorite category</div>
-            <div className='categories'>
-                {catego.map((item, index) => (
-                    <div className='category' key={index} dangerouslySetInnerHTML={{ __html: item["name"] }} onClick={() => pickCat(item["id"])}>
-                    </div>
-                ))}
-            </div>
+            {
+                !loading ?
+                    <>
+                        {
+                            best[0] ?
+                                <>
+                                    <div className='h4 mx-4'>What you might like</div>
+                                    <div className='categories'>
+                                        {best.map((item, index) => (
+                                            <div className='category' key={index} onClick={() => pickCat(item, index)}>
+                                                {item["name"]}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                                :
+                                <Spinner />
+                        }
+
+                        <div className='h4 mx-4'>Choose your favorite category</div>
+                        <div className='categories'>
+                            {catego.map((item, index) => (
+                                <div className='category' key={index} dangerouslySetInnerHTML={{ __html: item["name"] }} onClick={() => pickCat(item)}>
+                                </div>
+                            ))}
+                        </div>
+
+                    </>
+                    :
+                    <Spinner />
+            }
         </div>;
     }
     const Difficulty = () => {

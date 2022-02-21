@@ -126,7 +126,7 @@ function Quiz({ getUser }) {
 
     const Checker = () => {
         if (!data && parameter) return <Spinner />
-        if (changecat) return <Category setcat={(pa) => changecatthing(pa)} />
+        if (changecat) return <Category currentUser={currentUser} setcat={(pa) => changecatthing(pa)} />
         if (quitting) return <Quit />;
         if (q_limit !== null) return <div className='text-center text-white'>
             <div className='h1 mb-4'>{q_limit === 0 ? "Oops, you got none of the questions. Not bad you can try again."
