@@ -1,18 +1,24 @@
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import css from "./login.module.css";
 import { Envelope, EyeFill, EyeSlashFill, Google, Key, Person } from 'react-bootstrap-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { logo } from '../assets/images';
 import { analy, auth, provider } from '../firebase';
-import { setCurrentScreen } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 
 function SignUp() {
-    setCurrentScreen(analy, "SignUp_page");
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        logEvent(analy, 'screen_view', {
+            firebase_screen: "Signup_screen",
+            firebase_screen_class: "SignUp"
+        });
+    }, [])
 
     const withGoogle = async () => {
         try {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import css from "./login.module.css";
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { Envelope, EyeFill, EyeSlashFill, Google, Key } from 'react-bootstrap-icons';
@@ -6,14 +6,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logo } from '../assets/images';
 import { analy, auth, provider } from '../firebase';
 import Spinner from './utils/spinner';
-import { setCurrentScreen } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 
 function Login() {
-    setCurrentScreen(analy, "Login_page");
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        logEvent(analy, 'screen_view', {
+            firebase_screen: "Login_screen",
+            firebase_screen_class: "Login"
+        });
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();

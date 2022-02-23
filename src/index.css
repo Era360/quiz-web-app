@@ -3,7 +3,12 @@
     height: 100%;
 }
 .main {
-    height: 100vh;
+    height: 90vh;
+    overflow-y: scroll;
+    padding-bottom: 40px;
+}
+.sub_main{
+  height: 95vh;
 }
 .footer {
     background-color: rgba(0, 0, 0, 0.3);
@@ -82,6 +87,25 @@
     margin-top: .3em;
     cursor: pointer;
 }
+.off{
+  background-color: rgb(255, 77, 77);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+}
+.offline{
+  display: flex;
+  align-items: center;
+  color: white;
+  margin: 20px auto;
+  /* padding: 10px; */
+  border-radius: 5px;
+  width: fit-content;
+
+  /* background-color: #94928e; */
+}
+
 @media screen and (min-width: 900px) {
     .option:hover, .category:hover {
         color: white;

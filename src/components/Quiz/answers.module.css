@@ -1,0 +1,35 @@
+.card{
+    width: 90%;
+    margin: 0 auto;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px 12px rgba(0, 0, 0, 0.664);
+    background-color: azure;
+}
+.divider{
+    padding: 20px;
+    border-bottom : 1px solid rgba(0, 0, 0, 0.3);
+}
+.quest{
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+}
+.ansc{
+    margin: 10px auto;
+    text-align: center;
+    /* width: max-content; */
+}
+/* .option{
+    display: flex;
+    align-items: center;
+} */
+.ans{
+    margin: 0 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(0, 128, 0, 0.445);   
+}
+.btnn{
+    padding: 10px;
+    text-align: center;
+}

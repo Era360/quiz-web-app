@@ -1,4 +1,4 @@
-import { setCurrentScreen } from 'firebase/analytics';
+import { logEvent, setCurrentScreen } from 'firebase/analytics';
 import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom"
@@ -14,6 +14,10 @@ function Welcome({ getUser }) {
     const [initializing, setInitializing] = useState(true);
 
     useEffect(() => {
+        logEvent(analy, 'screen_view', {
+            firebase_screen: "Welcome_screen",
+            firebase_screen_class: "Welcome"
+        });
         if (getUser) setCurrentUser(getUser);
         if (initializing) setInitializing(false);
     }, [getUser, initializing])
@@ -28,6 +32,11 @@ function Welcome({ getUser }) {
             setError("failed to log out");
         }
     };
+
+    const addQuest = () => {
+        navigate("/addquestions")
+        logEvent(analy, "add_questions")
+    }
 
     if (initializing) return <Spinner />;
 
@@ -45,7 +54,7 @@ function Welcome({ getUser }) {
                     <div className='text-center my-4'>
                         <div className='my-2'>Please help us to add questions</div>
                         <div>
-                            <button className="btn btn-success" onClick={() => navigate("/addquestions")}>Okay  </button>
+                            <button className="btn btn-success" onClick={addQuest}>Okay  </button>
                         </div>
                     </div>
                     <div className='text-center'>
@@ -67,7 +76,7 @@ function Welcome({ getUser }) {
                     <div className='text-center my-4'>
                         <div className='my-2 fw-bolder'>Please help us to add more questions</div>
                         <div >
-                            <button className="btn btn-success" onClick={() => navigate("/addquestions")}>Okay</button>
+                            <button className="btn btn-success" onClick={addQuest}>Okay</button>
                         </div>
                     </div>
                 </div>

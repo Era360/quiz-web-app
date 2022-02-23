@@ -163,10 +163,12 @@ function Category(props) {
     const Cats = () => {
         return <div className='text-white'>
             {
-                !loading ?
+                loading ?
+                    <Spinner />
+                    :
                     <>
                         {
-                            best[0] ?
+                            props.currentUser ?
                                 <>
                                     <div className='h4 mx-4'>What you might like</div>
                                     <div className='categories'>
@@ -178,7 +180,7 @@ function Category(props) {
                                     </div>
                                 </>
                                 :
-                                <Spinner />
+                                <div />
                         }
 
                         <div className='h4 mx-4'>Choose your favorite category</div>
@@ -190,8 +192,6 @@ function Category(props) {
                         </div>
 
                     </>
-                    :
-                    <Spinner />
             }
         </div>;
     }

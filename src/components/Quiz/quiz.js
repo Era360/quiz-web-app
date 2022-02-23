@@ -6,7 +6,7 @@ import { analy, auth } from '../../firebase';
 import Category from './categories';
 import Questions from './questions';
 import Spinner from '../utils/spinner';
-import { setCurrentScreen } from 'firebase/analytics';
+import { logEvent, setCurrentScreen } from 'firebase/analytics';
 
 function Quiz({ getUser }) {
     setCurrentScreen(analy, "Quiz_page");
@@ -16,7 +16,6 @@ function Quiz({ getUser }) {
     const [error, setError] = useState("");
     const [changecat, setChangecat] = useState(true);
     const [parameter, setParameter] = useState(null);
-    const [q_limit, setQ_limit] = useState(null);
     const [session, setSession] = useState();
     const [quitting, setQuitting] = useState(false);
 
@@ -45,10 +44,9 @@ function Quiz({ getUser }) {
     const repeat = () => {
         setData(null);
         setParameter(null);
-        setQ_limit(null);
         setChangecat(!changecat);
-
     }
+
     const repeat_same = (param) => {
         setData(null);
         setParameter({
@@ -56,7 +54,6 @@ function Quiz({ getUser }) {
             cat_id: param.cat_id,
             dif: param.dif,
         });
-        setQ_limit(null)
     };
 
     const Quit = () => {
@@ -90,12 +87,16 @@ function Quiz({ getUser }) {
 
     };
 
-    const checkpoints = (param) => {
-        setQ_limit(param);
-    };
+    // const checkpoints = (param) => {
+    //     setQ_limit(param);
+    // };
 
     useEffect(() => {
         if (getUser) setCurrentUser(getUser);
+        logEvent(analy, 'screen_view', {
+            firebase_screen: "Quiz_screen",
+            firebase_screen_class: "Quiz"
+        });
         fetchquestions();
 
         async function fetchquestions() {
@@ -125,20 +126,14 @@ function Quiz({ getUser }) {
     }, [parameter, session, getUser])
 
     const Checker = () => {
-        if (!data && parameter) return <Spinner />
         if (changecat) return <Category currentUser={currentUser} setcat={(pa) => changecatthing(pa)} />
         if (quitting) return <Quit />;
-        if (q_limit !== null) return <div className='text-center text-white'>
-            <div className='h1 mb-4'>{q_limit === 0 ? "Oops, you got none of the questions. Not bad you can try again."
-                :
-                `Congrats, you got ${q_limit} out of ${parameter.amount} questions.`}</div>
-            <div className='my-3'>
-                <div className='my-3'><button className='btn btn-success' onClick={() => repeat_same(parameter)}>repeat with same choices</button></div>
-                <button className='btn btn-success mx-4' onClick={repeat}>repeat with different choices</button>
-            </div>
-            <button className='btn btn-danger fs-5' onClick={() => setQuitting(!quitting)}>Quit</button>
-        </div>
-        return <Questions info={data} sendPts={checkpoints} />
+        // if (q_limit !== null) return <Answers data={data} repeat={repeat} repeat_same={repeat_same} q_limit={q_limit} parameter={parameter} quitting={() => setQuitting(!quitting)} />
+        return <Questions info={data}
+            repeat={repeat}
+            repeat_same={repeat_same} parameter={parameter}
+            quitting={() => setQuitting(!quitting)}
+        />
 
     };
 
@@ -172,29 +167,54 @@ function Quiz({ getUser }) {
             </div>
         </nav>
         {
-            error
-                ?
-                <div role="alert" className='alert alert-danger'><CloudSlash size={30} />{error}</div>
+            navigator.onLine ?
+                (
+                    <>
+                        {
+                            error
+                                ? <div className='main'>
+                                    <div role="alert" className='alert alert-danger'><CloudSlash size={30} />
+                                        {error}
+                                    </div>
+                                    <div className='text-center'><EmojiFrown size={100} /></div>
+                                </div>
+                                :
+                                <div className='main'>
+                                    <div className='fs-3 text-white text-center p-4'>Welcome
+                                        {currentUser && currentUser.displayName ? ` ${currentUser.displayName}` : "  Guest"}
+                                    </div>
+                                    <div>
+                                        {!data && parameter ? <Spinner /> : <Checker />}
+                                    </div>
+                                </div>
+                        }
+
+                        <div className="footer">
+                            {
+                                currentUser ? (
+                                    <div>
+                                        <button className='btn btn-warning' onClick={goOut}>Sign out</button>
+                                        <div className='h4'>Welcome and come again</div>
+                                    </div>
+                                )
+                                    :
+                                    <div>Welcome and come again</div>
+                            }
+                        </div>
+                    </>
+
+                )
                 :
-                <div className='fs-3 text-white text-center p-4'>Welcome
-                    {currentUser && currentUser.displayName ? ` ${currentUser.displayName}` : "  Guest"}
+                <div className='sub_main'>
+                    <div className='offline'>
+                        <div className='off'></div>
+                        <h2>You are Offline</h2>
+                    </div>
+                    <div className='text-center'>
+                        <button className='btn btn-warning' onClick={() => window.location.reload()}>Retry</button>
+                    </div>
                 </div>
         }
-        <div className='main'>
-            {error ? <div className='text-center'><EmojiFrown size={100} /></div> : <Checker />}
-        </div>
-        <div className="footer">
-            {
-                currentUser ? (
-                    <div>
-                        <button className='btn btn-warning' onClick={goOut}>Sign out</button>
-                        <div className='h4'>Welcome and come again</div>
-                    </div>
-                )
-                    :
-                    <div>Welcome and come again</div>
-            }
-        </div>
 
     </div>;
 }
